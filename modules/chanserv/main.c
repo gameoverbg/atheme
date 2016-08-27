@@ -63,6 +63,7 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 	mychan_t *mc = NULL;
 	char orig[BUFSIZE];
 	char newargs[BUFSIZE];
+	char localbufer[BUFSIZE];
 	char *cmd;
 	char *args;
 
@@ -101,9 +102,11 @@ static void chanserv(sourceinfo_t *si, int parc, char *parv[])
 
 	/* make a copy of the original for debugging */
 	mowgli_strlcpy(orig, parv[parc - 1], BUFSIZE);
-
+        /* use localbufer because of dont you will cause moving of pointer in to other services with fantasy commands */
+        mowgli_strlcpy(localbufer, parv[parc - 1], BUFSIZE);
 	/* lets go through this to get the command */
-	cmd = strtok(parv[parc - 1], " ");
+	/* use new localbufer for command calculation purposes */
+	cmd = strtok(localbufer, " ");
 
 	if (!cmd)
 		return;
